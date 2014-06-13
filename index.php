@@ -5,9 +5,9 @@ require_once('functions.php');
 
 // Read the iCal feed and save it as a file for the parser.
 $calendar_filename = 'calendar.ics';
-// $calendar_link = 'http://p03-calendarws.icloud.com/ca/subscribe/1/U2cSSBU-nJnXEqcVmnf-xsLf-ZFxBpFJCmjwO6Rb_ptpEhnvZXoY2LgVJOKayAx-DeDrZ3P0ZfkrV1qUi46JDXoTvQXTucuskegtYrPFH3E';
-// $calendar_data = file_get_contents($calendar_link);
-// file_put_contents($calendar_filename, $calendar_data);
+$calendar_link = 'http://p03-calendarws.icloud.com/ca/subscribe/1/U2cSSBU-nJnXEqcVmnf-xsLf-ZFxBpFJCmjwO6Rb_ptpEhnvZXoY2LgVJOKayAx-DeDrZ3P0ZfkrV1qUi46JDXoTvQXTucuskegtYrPFH3E';
+$calendar_data = file_get_contents($calendar_link);
+file_put_contents($calendar_filename, $calendar_data);
 
 $calendar = new ICal($calendar_filename);
 

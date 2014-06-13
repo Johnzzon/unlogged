@@ -103,7 +103,7 @@ foreach ($calendar->cal['VEVENT'] as $event) {
                 print '<tr class="task ' . $stripe . '"><td>' . $task->title . '</td><td class="duration">' . $task->duration . '</td></tr>';
                 $i++;
               }
-              print '<tr><td></td><td>' . $project->duration . '</td></tr>';
+              print '<tr><td></td><td>(' . $project->duration . ')</td></tr>';
             }
 
           ?>

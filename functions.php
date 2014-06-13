@@ -4,7 +4,7 @@ require_once('class.iCalReader.php');
 
 function dsm($value, $key = FALSE) {
   if ($key) {
-    print '<br />' . $key . ' =>';
+    print $key . ' =>';
   }
   krumo($value);
 }

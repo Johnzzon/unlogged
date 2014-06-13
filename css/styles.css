@@ -1,0 +1,34 @@
+h1, h2 {
+  text-align: center;
+}
+h2 .glyphicon {
+  font-size: 23px;
+  margin-right: 10px;
+}
+
+.main-content {
+  width: 420px;
+  padding: 20px;
+  margin: 50px;
+  background: #f4f8fa;
+}
+
+.project-title {
+  font-weight: 600;
+}
+.task {
+  padding: 10px;
+}
+.task .duration {
+  font-weight: 600;
+}
+.task.odd {
+  background: #bee3ff;
+}
+.task.even {
+  background: #d3eeff;
+}
+
+.total {
+  font-weight: 600;
+}

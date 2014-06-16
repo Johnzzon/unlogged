@@ -13,6 +13,9 @@ $calendar = new ICal($calendar_filename);
 
 // If there's a date in the query, use it as a filter or default to today.
 $date_filter = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
+$date_filter_timestamp = strtotime($date_filter);
+$yesterday = date('Y-m-d', strtotime('-1 day', $date_filter_timestamp));
+$tomorrow = date('Y-m-d', strtotime('+1 day', $date_filter_timestamp));
 
 $unlogged_events = array();
 $total_duration = 0;
@@ -38,20 +41,20 @@ foreach ($calendar->cal['VEVENT'] as $event) {
     $project = $summary[0];
     $task = $summary[1];
 
-    // Project duration
+    // Calculate project duration
     if (isset($unlogged_events[$project]['duration'])) {
       $previous_project_duration = $unlogged_events[$project]['duration'];
-      $unlogged_events[$project]['duration'] = $previous_project_duration + $event_duration_hours;
+      $unlogged_events[$project]['duration'] = sprintf('%0.2f', ($previous_project_duration + $event_duration_hours));
     }
     else {
       $unlogged_events[$project]['duration'] = $event_duration_hours;
       $unlogged_events[$project]['title'] = $project;
     }
 
-    // Task duration
+    // Calculate task duration
     if (isset($unlogged_events[$project]['tasks'][$task]['duration'])) {
       $previous_task_duration = $unlogged_events[$project]['tasks'][$task]['duration'];
-      $unlogged_events[$project]['tasks'][$task]['duration'] = $previous_task_duration + $event_duration_hours;
+      $unlogged_events[$project]['tasks'][$task]['duration'] = sprintf('%0.2f', ($previous_task_duration + $event_duration_hours));
     }
     else {
       $unlogged_events[$project]['tasks'][$task] = array(
@@ -81,38 +84,57 @@ foreach ($calendar->cal['VEVENT'] as $event) {
   </head>
   <body>
     <div class="main-content">
-      <h1>Unlogged events</h1>
+      <h1>Unlogged</h1>
 
-      <h2><span class="glyphicon glyphicon-time"></span><?php print $date_filter; ?></h2>
+      <h2><a href="?date=<?php print $yesterday; ?>"><span class="glyphicon glyphicon-chevron-left"></span></a><span class="glyphicon glyphicon-time"></span><?php print $date_filter; ?><a href="?date=<?php print $tomorrow; ?>"><span class="glyphicon glyphicon-chevron-right"></span></a></h2>
       <table class="table">
         <tbody>
           <?php
             $i = 0;
-            // Step through projects
-            foreach ($unlogged_events as $project) {
-              $project = (object)$project;
+            if (!empty($unlogged_events)) {
+              // Step through projects
+              foreach ($unlogged_events as $project) {
+                $project = (object)$project;
 
-              print '<tr><td class="project-title" colspan="2">' . $project->title . '</td></tr>';
+                print '<tr><td class="project-title" colspan="2">' . $project->title . '</td></tr>';
 
-              // Step through tasks on a project
-              foreach ($project->tasks as $task) {
-                $task = (object)$task;
+                // Step through tasks on a project
+                foreach ($project->tasks as $task) {
+                  $task = (object)$task;
 
-                // Add striping class
-                $stripe = ($i%2 == 0) ? 'odd' : 'even';
-                print '<tr class="task ' . $stripe . '"><td>' . $task->title . '</td><td class="duration">' . $task->duration . '</td></tr>';
-                $i++;
+                  // Add striping class
+                  $stripe = ($i%2 == 0) ? 'odd' : 'even';
+                  print '<tr class="task ' . $stripe . '"><td>' . $task->title . '</td><td class="duration">' . $task->duration . '<div class="harvest-timer" data-project=\'{"id":42,"name":"' . $project->title . '"}\' data-item=\'{"id":123,"name":"' . $task->title . '"}\'></div></td></tr>';
+                  // print '<tr class="task ' . $stripe . '"><td>' . $task->title . '</td><td class="duration">' . $task->duration .
+                  // '<div class="harvest-timer"></div></td></tr>';
+                  $i++;
+                }
+                print '<tr><td></td><td>(' . $project->duration . ')</td></tr>';
               }
-              print '<tr><td></td><td>(' . $project->duration . ')</td></tr>';
+              print '<tr class="task total"><td>Total</td><td class="duration">' . $total_duration . '</td></tr>';
+            }
+            else {
+              print '<tr class=""><td colspan="2">No unlogged entries for this day</td></tr>';
             }
 
           ?>
-          <tr class="task total"><td>Total</td><td class="duration"><?php print $total_duration; ?></td></tr>
         </tbody>
       </table>
 
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script>
+      (function() {
+        window._harvestPlatformConfig = {
+          "applicationName": "Unlogged",
+        };
+        var s = document.createElement('script');
+        s.src = '//platform.harvestapp.com/assets/platform.js';
+        s.async = true;
+        var ph = document.getElementsByTagName('script')[0];
+        ph.parentNode.insertBefore(s, ph);
+      })();
+    </script>
   </body>
 </html>

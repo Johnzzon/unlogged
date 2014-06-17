@@ -104,7 +104,7 @@ foreach ($calendar->cal['VEVENT'] as $event) {
 
                   // Add striping class
                   $stripe = ($i%2 == 0) ? 'odd' : 'even';
-                  print '<tr class="task ' . $stripe . '"><td>' . $task->title . '</td><td class="duration">' . $task->duration . '<div class="harvest-timer" data-project=\'{"id":42,"name":"' . $project->title . '"}\' data-item=\'{"id":123,"name":"' . $task->title . '"}\'></div></td></tr>';
+                  print '<tr class="task ' . $stripe . '"><td>' . $task->title . '</td><td class="duration">' . $task->duration . '<div class="harvest-timer" data-project=\'{"id":"' . urlencode($project->title) . '","name":"' . $project->title . '"}\' data-item=\'{"id":"' . urlencode($task->title) . '","name":"' . $task->title . '"}\'></div></td></tr>';
                   // print '<tr class="task ' . $stripe . '"><td>' . $task->title . '</td><td class="duration">' . $task->duration .
                   // '<div class="harvest-timer"></div></td></tr>';
                   $i++;

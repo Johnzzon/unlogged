@@ -7,7 +7,7 @@ h2 .glyphicon {
 }
 
 .main-content {
-  width: 420px;
+  width: 620px;
   padding: 20px;
   margin: 50px;
   background: #f4f8fa;
@@ -31,4 +31,22 @@ h2 .glyphicon {
 
 .total {
   font-weight: 600;
+}
+
+.duration .harvest-timer,
+.duration .harvest-timer.styled {
+  border: none;
+  background: #1D6EAB;
+  display: inline-block;
+  margin-left: 5px;
+  padding: 3px 4px;
+  height: 21px;
+  width: 20px;
+}
+.duration .harvest-timer:hover,
+.duration .harvest-timer.styled:hover {
+  background: #53A7E5;
+}
+.duration .harvest-timer-icon {
+  background-position: -12px 0;
 }

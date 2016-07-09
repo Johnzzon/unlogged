@@ -40,6 +40,13 @@ foreach ($calendar->cal['VEVENT'] as $event) {
     $summary = explode(': ', $event->SUMMARY);
     $project = $summary[0];
     $task = $summary[1];
+    $task_output = $task;
+    // Build JIRA links for matched projects.
+    $task_output = preg_replace('/([A-Z]+\b-[0-9]+\b)/', '<a href="https://kodamera.atlassian.net/browse/$1" target="_blank">$1</a>', $task);
+
+    // if (preg_match('/[A-Z]+\b-[0-9]+\b/', $task)) {
+    //   $task_output = preg
+    // }
 
     // Calculate project duration
     if (isset($unlogged_events[$project]['duration'])) {
@@ -58,7 +65,7 @@ foreach ($calendar->cal['VEVENT'] as $event) {
     }
     else {
       $unlogged_events[$project]['tasks'][$task] = array(
-        'title' => $task,
+        'title' => $task_output,
         'duration' => $event_duration_hours,
       );
     }

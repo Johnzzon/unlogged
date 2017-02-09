@@ -20,54 +20,56 @@ $tomorrow = date('Y-m-d', strtotime('+1 day', $date_filter_timestamp));
 $unlogged_events = array();
 $total_duration = 0;
 
-foreach ($calendar->cal['VEVENT'] as $event) {
-  // Convert to object for ease.
-  $event = (object)$event;
-  $start_date_timestamp = strtotime($event->DTSTART);
-  $start_date_pretty = date('Y-m-d', $start_date_timestamp);
+if (!empty($calendar->cal['VEVENT'])) {
+  foreach ($calendar->cal['VEVENT'] as $event) {
+    // Convert to object for ease.
+    $event = (object)$event;
+    $start_date_timestamp = strtotime($event->DTSTART);
+    $start_date_pretty = date('Y-m-d', $start_date_timestamp);
 
-  // Make sure we list events from given date
-  if ($start_date_pretty == $date_filter) {
+    // Make sure we list events from given date
+    if ($start_date_pretty == $date_filter) {
 
-    $end_date_timestamp = strtotime($event->DTEND);
+      $end_date_timestamp = strtotime($event->DTEND);
 
-    // Calculate duration
-    $event_duration = ($end_date_timestamp - $start_date_timestamp);
-    $event_duration_hours = ($event_duration / 60 / 60); // seconds to hours
-    $event_duration_hours = sprintf('%0.2f', $event_duration_hours);
-    $total_duration = ($total_duration + $event_duration_hours);
+      // Calculate duration
+      $event_duration = ($end_date_timestamp - $start_date_timestamp);
+      $event_duration_hours = ($event_duration / 60 / 60); // seconds to hours
+      $event_duration_hours = sprintf('%0.2f', $event_duration_hours);
+      $total_duration = ($total_duration + $event_duration_hours);
 
-    $summary = explode(': ', $event->SUMMARY);
-    $project = $summary[0];
-    $task = $summary[1];
-    $task_output = $task;
-    // Build JIRA links for matched projects.
-    $task_output = preg_replace('/([A-Z]+\b-[0-9]+\b)/', '<a href="https://kodamera.atlassian.net/browse/$1" target="_blank">$1</a>', $task);
+      $summary = explode(': ', $event->SUMMARY);
+      $project = $summary[0];
+      $task = $summary[1];
+      $task_output = $task;
+      // Build JIRA links for matched projects.
+      $task_output = preg_replace('/([A-Z]+\b-[0-9]+\b)/', '<a href="https://kodamera.atlassian.net/browse/$1" target="_blank">$1</a>', $task);
 
-    // if (preg_match('/[A-Z]+\b-[0-9]+\b/', $task)) {
-    //   $task_output = preg
-    // }
+      // if (preg_match('/[A-Z]+\b-[0-9]+\b/', $task)) {
+      //   $task_output = preg
+      // }
 
-    // Calculate project duration
-    if (isset($unlogged_events[$project]['duration'])) {
-      $previous_project_duration = $unlogged_events[$project]['duration'];
-      $unlogged_events[$project]['duration'] = sprintf('%0.2f', ($previous_project_duration + $event_duration_hours));
-    }
-    else {
-      $unlogged_events[$project]['duration'] = $event_duration_hours;
-      $unlogged_events[$project]['title'] = $project;
-    }
+      // Calculate project duration
+      if (isset($unlogged_events[$project]['duration'])) {
+        $previous_project_duration = $unlogged_events[$project]['duration'];
+        $unlogged_events[$project]['duration'] = sprintf('%0.2f', ($previous_project_duration + $event_duration_hours));
+      }
+      else {
+        $unlogged_events[$project]['duration'] = $event_duration_hours;
+        $unlogged_events[$project]['title'] = $project;
+      }
 
-    // Calculate task duration
-    if (isset($unlogged_events[$project]['tasks'][$task]['duration'])) {
-      $previous_task_duration = $unlogged_events[$project]['tasks'][$task]['duration'];
-      $unlogged_events[$project]['tasks'][$task]['duration'] = sprintf('%0.2f', ($previous_task_duration + $event_duration_hours));
-    }
-    else {
-      $unlogged_events[$project]['tasks'][$task] = array(
-        'title' => $task_output,
-        'duration' => $event_duration_hours,
-      );
+      // Calculate task duration
+      if (isset($unlogged_events[$project]['tasks'][$task]['duration'])) {
+        $previous_task_duration = $unlogged_events[$project]['tasks'][$task]['duration'];
+        $unlogged_events[$project]['tasks'][$task]['duration'] = sprintf('%0.2f', ($previous_task_duration + $event_duration_hours));
+      }
+      else {
+        $unlogged_events[$project]['tasks'][$task] = array(
+          'title' => $task_output,
+          'duration' => $event_duration_hours,
+        );
+      }
     }
   }
 }

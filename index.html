@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Unlogged</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+
+    <script src="https://unpkg.com/vue"></script>
+    <script src="js/main.js"></script>
+  </head>
+
+  <body>
+    <div id="app-root">
+      <div class="main-content">
+        <h1>Unlogged</h1>
+
+        <div class="projects">
+          <project v-for="item in projects" v-bind:project="item"></project>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      var app = new Vue({
+        el: '#app-root',
+        data: {
+          projects: [
+            {
+              title: 'LOT S1702', 
+              tasks: [
+                { title: 'Måndagsmöte', duration: 0.25 },
+                { title: 'Kompetensutveckling', duration: 0.75 }
+              ]
+            },
+            { title: 'GAR S1703' }
+          ]
+        }
+      });
+    </script>
+
+  </body>
+</html>

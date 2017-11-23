@@ -12,6 +12,7 @@ file_put_contents($calendar_filename, $calendar_data);
 $calendar = new ICal($calendar_filename);
 
 // If there's a date in the query, use it as a filter or default to today.
+date_default_timezone_set('Europe/Stockholm');
 $date_filter = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
 $date_filter_timestamp = strtotime($date_filter);
 $yesterday = date('Y-m-d', strtotime('-1 day', $date_filter_timestamp));

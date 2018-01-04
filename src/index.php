@@ -44,7 +44,7 @@ if (!empty($calendar->cal['VEVENT'])) {
       $task = $summary[1];
       $task_output = $task;
       // Build JIRA links for matched projects.
-      $task_output = preg_replace('/([A-Z]+\b-[0-9]+\b)/', '<a href="https://kodamera.atlassian.net/browse/$1" target="_blank">$1</a>', $task);
+      $task_output = preg_replace('/([A-Z0-9]+\b-[0-9]+\b)/', '<a href="https://kodamera.atlassian.net/browse/$1" target="_blank">$1</a>', $task);
 
       // if (preg_match('/[A-Z]+\b-[0-9]+\b/', $task)) {
       //   $task_output = preg

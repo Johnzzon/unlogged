@@ -68,6 +68,7 @@ if (!empty($calendar->cal['VEVENT'])) {
       else {
         $unlogged_events[$project]['tasks'][$task] = array(
           'title' => $task_output,
+          'raw_title' => $task,
           'duration' => $event_duration_hours,
         );
       }
@@ -114,7 +115,7 @@ if (!empty($calendar->cal['VEVENT'])) {
 
                   // Add striping class
                   $stripe = ($i%2 == 0) ? 'odd' : 'even';
-                  print '<tr class="task ' . $stripe . '"><td>' . $task->title . '</td><td class="duration">' . $task->duration . '<div class="harvest-timer" data-project=\'{"id":"' . urlencode($project->title) . '","name":"' . $project->title . '"}\' data-item=\'{"id":"' . urlencode($task->title) . '","name":"' . $task->title . '"}\'></div></td></tr>';
+                  print '<tr class="task ' . $stripe . '"><td>' . $task->title . '</td><td class="duration">' . $task->duration . '<div class="harvest-timer" data-project=\'{"id":"' . urlencode($project->title) . '","name":"' . $project->title . '"}\' data-item=\'{"id":"' . urlencode($task->title) . '","name":"' . $task->raw_title . '"}\'></div></td></tr>';
                   // print '<tr class="task ' . $stripe . '"><td>' . $task->title . '</td><td class="duration">' . $task->duration .
                   // '<div class="harvest-timer"></div></td></tr>';
                   $i++;
